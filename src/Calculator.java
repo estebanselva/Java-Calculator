@@ -1,7 +1,9 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class Calculator extends JPanel {
+public class Calculator extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L; // Java convention
 
     public static final int WIDTH = 320; // Setting the width of the calculator
@@ -14,6 +16,9 @@ public class Calculator extends JPanel {
     private JButton[] opButtons;
 
     private JTextField field;
+
+    private double num1, num2, ans;
+    private int op;
 
     //This will set all the values into play
     // [0] = gridx, [1] = gridy, [2] = gridwidth, [3] = gridheight
@@ -62,6 +67,7 @@ public class Calculator extends JPanel {
         // JButton[1] will be button 2, and so on.... until all 10 buttons are classified.
         for(int i = 0; i < numberButtons.length; i++) {
             numberButtons[i] = new JButton("" + i);
+            numberButtons[i].addActionListener(this);
 
             gbc.gridx = numConstraints[i][0];
             gbc.gridy = numConstraints[i][1];
@@ -90,6 +96,8 @@ public class Calculator extends JPanel {
             gbc.gridwidth = opConstraints[x][2];
             gbc.gridheight = opConstraints[x][3];
 
+            opButtons[x].addActionListener(this);
+
             add(opButtons[x], gbc);
         }
 
@@ -97,6 +105,7 @@ public class Calculator extends JPanel {
         field = new JTextField();
         field.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         field.setEditable(false);
+        field.setFont(new Font("Arial", Font.PLAIN, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 4;
@@ -115,6 +124,68 @@ public class Calculator extends JPanel {
         frame.pack(); // Set size of frame to the size of the panel.
         frame.setLocationRelativeTo(null); // Will center frame on the screen.
         frame.setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        for(int i = 0; i < numberButtons.length; i++) {
+            if(e.getSource() == numberButtons[i]) {
+                field.setText(field.getText() + i);
+            }
+        }
+
+        if (e.getSource() == opButtons[0] && !field.getText().contains(".")) {
+            field.setText(field.getText() + ".");
+        }
+
+        if(e.getSource() == opButtons[6]) {
+            field.setText("" + (-1 * Double.parseDouble(field.getText())));
+        }
+
+        if (e.getSource() == opButtons[7]) {
+            field.setText("");
+        }
+
+        if (e.getSource() == opButtons[2]) {
+            num1 = Double.parseDouble(field.getText());
+            op = 1;
+            field.setText("");
+        }
+
+        if (e.getSource() == opButtons[3]) {
+            num1 = Double.parseDouble(field.getText());
+            op = 2;
+            field.setText("");
+        }
+
+        if (e.getSource() == opButtons[4]) {
+            num1 = Double.parseDouble(field.getText());
+            op = 3;
+            field.setText("");
+        }
+
+        if (e.getSource() == opButtons[5]) {
+            num1 = Double.parseDouble(field.getText());
+            op = 4;
+            field.setText("");
+        }
+
+        if (e.getSource() == opButtons[1]) {
+            num2 = Double.parseDouble(field.getText());
+
+            if (op == 1) {
+                ans = num1 + num2;
+            }else if (op == 2) {
+                ans = num1 - num2;
+            }else if (op == 3) {
+                ans = num1 * num2;
+            }else if (op == 4) {
+                ans = num1 / num2;
+            }
+
+            op = 0;
+            field.setText("" + ans);
+        }
+
     }
 }
 
