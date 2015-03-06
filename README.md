@@ -1,3 +1,3 @@
 # Java-Calculator
-Simple calculator program using Java.
+Simple calculator with GUI program using Java.
 Java code found in the src folder.
